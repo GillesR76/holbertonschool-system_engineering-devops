@@ -1,0 +1,62 @@
+   +-----------------------------------------------------------+
+   |                        USER                               |
+   +-----------------------------------------------------------+
+                   |
+                   | The user sends an HTTP request to the domain name 
+                   | of the website
+                   |
+   +-----------------------------------------------------------+
+   |                      INTERNET                             |
+   | (global network of computers and devices that communicate |
+   |                with each other)                           |
+   +-----------------------------------------------------------+
+                   |
+                   | The DNS servers resolve the domain name to the
+	               | IP address of the server
+                   |
+   +-----------------------------------------------------------+
+   |                       DNS SERVERS                         |
+   |   (computers that store and provide the IP addresses of   |
+   |			         domain names)                         |             |                                                           |
+   |   +-----------------------+                               |
+   |   |   foobar.com          |                               |
+   |   |   (Authoritative)     |                               |
+   |   |                       |                               |
+   |   |   www.foobar.com      |                               |
+   |   |   (A Record: 8.8.8.8) |                               |
+   |   +-----------------------+                               |
+   +-----------------------------------------------------------+
+                   |
+                   | HTTP Request
+                   |
+   +-----------------------------------------------------------+
+   |                        Server                             |
+   |      (A computer that hosts the web applicationand        |
+   |                     its components)                       |
+   |   +-----------------------+           +----------------+  |
+   |   |      Web Server       |           | Application    |  |
+   |   |       (Nginx)         |           | Server         |  |
+   |   |                       |           |                |  |
+   |   |   +--------------+    |           |   +--------+   |  |
+   |   |   | Static Files |    |           |   |Database|   |  |
+   |   |   |  (HTML, CSS, |    |           |   | (MySQL)|   |  |
+   |   |   |    Images)   |    |           |   +--------+   |  |
+   |   |   +--------------+    |           +----------------+  |
+   |   +-----------------------+                               |
+   +-----------------------------------------------------------+
+                   |
+                   | The server sends the HTTP response to the 
+                   | internet 
+                   |
+   +-----------------------------------------------------------+
+   |                      INTERNET                             |
+   |   (The internet forwards the HTTP response to the user)   |
+   |                                                           |
+   +-----------------------------------------------------------+
+                   |
+                   | The user receives the HTTP response and 
+                   | views the website 
+                   |
+   +-----------------------------------------------------------+
+   |                        User                               |
+   +-----------------------------------------------------------+
