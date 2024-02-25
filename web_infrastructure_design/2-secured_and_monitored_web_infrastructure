@@ -1,0 +1,131 @@
+   +-----------------------------------------------------------+
+   |                        User                               |
+   +-----------------------------------------------------------+
+         |                                          ^   |
+         | HTTP Request                             |   |                      
+         |                                          |   |
+   +-----------------------------------------------------------+
+   |                      Internet                             |
+   +-----------------------------------------------------------+
+         |                                          |   |
+	     |                      DNS servers respond |   | 
+         |                       with IP address    |   | DNS Query (to resolve domain name into an IP address)
+		 |                                          |   |	     	       +-----------------------------------------------------------+
+		 |                                          |   |		           |                       DNS Servers                         |
+		 |                                          |   |		           |                                                           |
+		 |                                          |   |----------------> |   +-----------------------+                               |
+		 | HTTP Request		                        |----------------------|   |   foobar.com          |                               |
+		 | forwarded to the				                                   |   |   (Authoritative)     |                               |
+		 | load balancer					                               |   |                       |                               |
+		 |							                                       |   |   www.foobar.com      |                               |
+		 |							                                       |   |   (A Record: IP)      |                               |
+		 |							                                       |   +-----------------------+                               |
+		 |							                                       +-----------------------------------------------------------+
+         |
+         | 
+         |
+         |
+         | 
+         |
+   +-----------------------------------------------------------+
+   |                    Firewall                               |
+   |         (Protecting from malicious traffic)               |
+   +-----------------------------------------------------------+
+                   |
+                   | HTTPS Request
+                   |
+   +-----------------------------------------------------------+
+   |                    Load Balancer                          |
+   |     (HAproxy with Round Robin distribution algorithm)     |
+   |                   Active - Passive                        |
+   +-----------------------------------------------------------+
+                        ^   |      ^  |
+                        |   |      |  | HTTPS Request (distributed by Load Balancer)
+                        |   |      |  |
+                        |   |      |  |                                   |---|  +------------------------------------------------------------------------------+
+                        |   |      |  |                                   |   |  |                                   Server 1                                   |
+                        |   |      |  |                                   |   |  |                                   Primary                                    |
+                        |   |      |  |                                   |   |  |                                                                              |
+                        |   |      |  |                                   |   |  |   +-------------------+          +---------------+          +------------+   |
+                        |   |      |  |                                   |   |  |   |   Web Server 1    |<---------|  Application  |<---------|  Database  |   |
+                        |   |      |  |---------------------------------->|   |  |   |                   |          |    Server 1   |          |   (MySQL)  |<--|----|
+                        |   |      |--------------------------------------|   |  |   |      (Nginx)      |--------->|  (PHP/Python) |--------->|   Primary  |   |    |
+                        |   |                                             |   |  |   +-------------------+          +---------------+          +------------+   |    |
+                        |   |                                             |   |  |                                                                              |    | 
+                        |   |                                             |---|  +------------------------------------------------------------------------------+    | 
+                        |   |                                            Firewall                            						             |
+                        |   |                            													     |                                                          
+                        |   |                                             |---|  +------------------------------------------------------------------------------+    |
+                        |   |                                             |   |  |                                   Server 2                                   |    |
+                        |   |                                             |   |  |                                Replica/Backup                                |    |
+                        |   |                HTTPS Request                |   |  |                                                                              |    |
+                        |   |        (distributed by Load Balancer)       |   |  |   +-------------------+          +----------------+          +------------+  |    |
+                        |   |-------------------------------------------->|   |  |   |    Web Server 2   |<---------|  Application   |<---------|  Database  |  |    |
+                        |------------------------------------------------ |   |  |   |                   |          |    Server 2    |          |   (MySQL)  |<-|----|
+                                                                          |   |  |   |      (Nginx)      |--------->|  (PHP/Python)  |--------->|   Replica  |  |
+                                                                          |   |  |   +-------------------+          +----------------+          +------------+  |
+                                                                          |   |  |                                                                              |  
+                                                                          |---|  +------------------------------------------------------------------------------+
+								                                         Firewall
+
+
+--> Explanation of the DNS Resolution:
+
+DNS resolution works bidirectionally in the context of a web architecture:
+
+- From User to DNS Servers:
+Initially, the user's device sends a DNS query to DNS servers to resolve a domain name (e.g., www.example.com) into an IP address.
+The DNS servers respond with the IP address associated with the domain name, allowing the user's device to establish a connection with the corresponding web server.
+
+- From Load Balancer to Web/Application Servers:
+Once the user's device has the IP address of the web server, it sends an HTTP request to that IP address.
+The HTTP request is forwarded to the load balancer, which then distributes the request to the appropriate web or application servers based on its load-balancing algorithm.
+The selected web or application server processes the request and generates a response, which is then sent back to the user's device through the load balancer.
+In summary, DNS resolution enables users to translate domain names into IP addresses to reach the appropriate web servers, while load balancing ensures that incoming HTTP 
+requests are distributed across multiple servers for efficient handling and scalability.
+
+
+--> Additional Elements:
+
+- Firewalls (3): Added to control incoming and outgoing traffic to and from the servers, protecting them from unauthorized access, malware, and other security threats.
+- SSL Certificate: Added to enable HTTPS encryption for secure communication between the clients and the servers, preventing eavesdropping and data tampering.
+An SSL (Secure Sockets Layer) certificate is a digital certificate that authenticates the identity of a website and encrypts data transmitted between the web server and 
+the client's browser. It serves as a crucial component in establishing a secure connection over the internet.
+- Monitoring Clients (3): Added to monitor the performance, availability, and security of the infrastructure in real-time, providing insights and alerts for proactive 
+maintenance and troubleshooting.
+
+
+--> Specifics:
+
+- Firewalls: Firewalls are essential for enforcing security policies and filtering traffic based on predefined rules. They act as a barrier between the internal network 
+(servers) and the external network (internet), preventing unauthorized access and protecting against cyber attacks.
+- HTTPS: Traffic is served over HTTPS to encrypt data transmitted between the clients and the servers, ensuring confidentiality and integrity. HTTPS is crucial for securing 
+sensitive information, such as user credentials, payment details, and personal data, especially in e-commerce and other web applications handling sensitive data.
+- Monitoring: Monitoring is used to track the health, performance, and security of the infrastructure components in real-time. It helps identify and diagnose issues, 
+optimize resource usage, and ensure service availability. Monitoring clients collect data on various metrics, such as CPU usage, memory usage, network traffic, response 
+times, error rates, and security events, and send this data to the monitoring system for analysis and reporting.
+
+
+--> Monitoring Tool:
+
+The monitoring tool collects data from the monitoring clients installed on each server and aggregates it for analysis. It provides dashboards, alerts, and reports to visualize 
+performance metrics and detect anomalies or issues. The monitoring tool may use agents installed on servers to collect data or rely on APIs and external integrations to gather 
+information.
+
+
+--> Monitoring Web Server QPS:
+
+To monitor the web server's QPS (Queries Per Second), you would configure the monitoring tool to collect metrics related to incoming HTTP requests, such as request count, request 
+rate, response time, and error rate. By analyzing these metrics, you can track the load on the web server and identify any performance bottlenecks or capacity issues.
+
+
+--> Issues:
+
+- Terminating SSL at the Load Balancer Level: Terminating SSL at the load balancer means that SSL decryption and encryption occur at the load balancer, exposing the decrypted 
+traffic within the internal network. This could pose a security risk if the internal network is compromised.
+- Single MySQL Server Capable of Accepting Writes: Having only one MySQL server capable of accepting writes creates a single point of failure (SPOF) for write operations. If 
+the primary MySQL server fails, write operations will be disrupted until it is restored or failover to a replica is initiated.
+- Uniform Servers: Having servers with all the same components (database, web server, and application server) might lead to a lack of diversity in the infrastructure, making it 
+susceptible to common-mode failures. Introducing diversity in server configurations can improve fault tolerance and reduce the impact of failures on the entire infrastructure.
+
+
