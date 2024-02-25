@@ -60,3 +60,51 @@
    +-----------------------------------------------------------+
    |                        User                               |
    +-----------------------------------------------------------+
+
+
+--> Issues with a simple web infrastructure:
+
+- Single Point of Failure (SPOF): In a simple web infrastructure, there's often a single server handling all incoming requests. 
+If this server fails due to hardware issues, software errors, or any other reason, the entire website or service becomes unavailable. 
+This single point of failure can lead to significant downtime and loss of business.
+
+- Downtime during Maintenance: When maintenance tasks such as deploying new code or applying updates are required, the web server often 
+needs to be restarted. During this downtime, the website or service becomes inaccessible to users, leading to potential loss of revenue 
+and frustration among users who rely on the service.
+
+- Limited Scalability: Simple web infrastructures typically lack scalability features such as auto-scaling or load balancing. As a result, 
+if the incoming traffic exceeds the capacity of the infrastructure, the website may become slow or unresponsive, or it may even crash under 
+the load. This inability to scale effectively can hinder growth and limit the potential of the website or service.
+
+--> What is a server:
+A server is a computer or a software system that provides services or resources to other computers, known as clients, over a network. Servers 
+are designed to handle specific tasks such as storing and delivering files, hosting websites, managing network resources, processing requests, 
+and more. In the context of web infrastructure, a server typically refers to a computer system that hosts websites or web applications and 
+responds to requests from clients (such as web browsers) over the internet.
+
+--> Role of the Domain Name:
+A domain name is a human-readable address that serves as a unique identifier for a website or web service on the internet. It provides a more 
+user-friendly way to access resources hosted on servers, instead of using numerical IP addresses. The role of a domain name is to provide a 
+memorable and recognizable name that users can type into their web browsers to access a specific website or service.
+
+Type of DNS Record for www.foobar.com:
+The DNS (Domain Name System) is responsible for translating domain names into IP addresses, allowing computers to locate and connect to resources 
+on the internet. The DNS record for www.foobar.com typically includes an "A record," which maps the domain name (www.foobar.com) to the corresponding 
+IP address of the web server hosting the website.
+
+--> Role of the Web Server:
+The web server is a software application or a physical server responsible for serving web content to clients over the internet. It handles incoming 
+HTTP requests from web browsers and delivers web pages, files, or other resources in response. The primary role of the web server is to process these 
+requests, retrieve the requested content from the server's file system or database, and send it back to the client's web browser for display.
+
+--> Role of the Application Server:
+The application server is a software framework or platform that provides an environment for running and executing web applications. It typically sits 
+between the web server and the database server and is responsible for processing dynamic content, executing application logic, managing sessions, and 
+interacting with other backend components such as databases or external services. Application servers play a crucial role in serving dynamic web pages 
+and supporting the functionality of web applications.
+
+--> Role of the Database:
+The database is a structured collection of data organized for efficient storage, retrieval, and manipulation. In the context of web applications, 
+databases store and manage various types of data, such as user information, content, settings, and transaction records. The role of the database is to 
+provide a persistent storage solution for storing and retrieving data required by the web application. It supports operations such as data querying, 
+insertion, updating, and deletion, enabling the application to store and retrieve information dynamically.
