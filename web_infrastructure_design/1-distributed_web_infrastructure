@@ -31,7 +31,7 @@
    +-----------------------------------------------------------+
    |                    Load Balancer                          |
    |     (HAproxy with Round Robin distribution algorithm)     |
-   |                   Active - Passive                        |
+   |                   Active - Active                         |
    +-----------------------------------------------------------+
                         ^   |      ^  |
                         |   |      |  | HTTP Request (distributed by Load Balancer)
