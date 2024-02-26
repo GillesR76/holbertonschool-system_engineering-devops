@@ -8,11 +8,11 @@
    |                      Internet                             |
    +-----------------------------------------------------------+
          |                                          |   |
-	   |                      DNS servers respond |   | DNS Query (to resolve domain name into an IP address)
-         |                       with IP address    |   | 
+	   |                                          |   | DNS Query (to resolve domain name into an IP address)
+         |                                          |   | 
 	   |                                          |   |	     	         +-----------------------------------------------------------+
-	   |                                          |   |		         |                       DNS Servers                         |
-	   |                                          |   |		         |                                                           |
+	   |                      DNS servers respond |   |		         |                       DNS Servers                         |
+	   |                          with IP address |   |		         |                                                           |
 	   |                                          |   |----------------> |   +-----------------------+                               |
 	   | HTTP Request		                      |----------------------|   |   foobar.com          |                               |
 	   | forwarded to the				                           |   |   (Authoritative)     |                               |
@@ -31,8 +31,8 @@
    |                                          Firewall                                             |
    |                                 (Protecting from malicious traffic)                           |
    +-----------------------------------------------------------------------------------------------+
+                                          | 
                                           | HTTPS Request
-                                          |
                                           |
                    |---------------------------------------------------------------------------| 
                    |                                                                           |
