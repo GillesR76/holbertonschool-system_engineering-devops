@@ -1,0 +1,118 @@
+   +-----------------------------------------------------------+
+   |                        User                               |
+   +-----------------------------------------------------------+
+         |                                          ^   |
+         | HTTP Request                             |   |                      
+         |                                          |   |
+   +-----------------------------------------------------------+
+   |                      Internet                             |
+   +-----------------------------------------------------------+
+         |                                          |   |
+	   |                      DNS servers respond |   | DNS Query (to resolve domain name into an IP address)
+         |                       with IP address    |   | 
+	   |                                          |   |	     	         +-----------------------------------------------------------+
+	   |                                          |   |		         |                       DNS Servers                         |
+	   |                                          |   |		         |                                                           |
+	   |                                          |   |----------------> |   +-----------------------+                               |
+	   | HTTP Request		                      |----------------------|   |   foobar.com          |                               |
+	   | forwarded to the				                           |   |   (Authoritative)     |                               |
+	   | load balancer					                     |   |                       |                               |
+	   |							                           |   |   www.foobar.com      |                               |
+	   |							                           |   |   (A Record: IP)      |                               |
+	   |							                           |   +-----------------------+                               |
+	   |							                           +-----------------------------------------------------------+
+         |
+         | 
+         |
+         |
+         | 
+         |
+   +-----------------------------------------------------------------------------------------------+
+   |                                          Firewall                                             |
+   |                                 (Protecting from malicious traffic)                           |
+   +-----------------------------------------------------------------------------------------------+
+                                          | HTTPS Request
+                                          |
+                                          |
+                   |---------------------------------------------------------------------------| 
+                   |                                                                           |
+                   |                                                                           |
+   +-----------------------------------------------------------+                +-----------------------------------------------------------+                        
+   |                    Load Balancer 1                        |                |                    Load Balancer 2                        |                         
+   |     (HAproxy with Round Robin distribution algorithm)     |                |     (HAproxy with Round Robin distribution algorithm)     |                        
+   |                   Active - Passive                        |                |                   Active - Passive                        |     
+   +-----------------------------------------------------------+                +-----------------------------------------------------------+     
+                   |                                                                                         |
+                   |                                                                                         |
+                   |-----------------------------------------------------------------------------------------|                           
+                                  |   |                
+                                  |   | HTTPS Request                
+                                  |   | (distributed by Load Balancer)   
+                                  |   |                                                   
+                                  |   |                       Firewall    
+                                  |   |                        |---|  +------------------------------------------------------------------------------+          +------------+
+                                  |   |                        |   |  |                                   Server 1                                   |          |            |
+                   HTTPS Response |   |                        |   |  |                                   Primary                                    |----------| Monitoring |
+            (containing web page) |   |                        |   |  |                                                                              |          |            |
+                                  |   |                        |   |  |   +-------------------+          +---------------+          +------------+   |          +------------+
+                                  |   |             |----------|   |  |   |   Web Server 1    |<---------|  Application  |<---------|  Database  |   |
+                                  |   |             |          |   |  |   |                   |          |    Server 1   |          |   (MySQL)  |<--|----|
+                                  |   |             |          |   |  |   |      (Nginx)      |--------->|  (PHP/Python) |--------->|   Primary  |   |    |
+                                  |   |             |          |   |  |   +-------------------+          +---------------+          +------------+   |    |
+                                  |   |             |          |   |  |                                                                              |    | 
+                                  |   |             |          |---|  +------------------------------------------------------------------------------+    | 
+                                  |   |             |                                                							                |                  													     |-------------------------------------|                                                                                                      |
+                                  |   |             |          |---|  +------------------------------------------------------------------------------+    |
+                                  |   |------------>|          |   |  |                                   Server 2                                   |    |
+                                  |                 |          |   |  |                                   Replica                                    |    |
+                                  |<----------------|          |   |  |                                                                              |    |
+                                                    |          |   |  |   +-------------------+          +----------------+          +------------+  |    |
+                                                    |----------|   |  |   |    Web Server 2   |<---------|  Application   |<---------|  Database  |  |    |
+                                                    |          |   |  |   |                   |          |    Server 2    |          |   (MySQL)  |<-|----|
+                                                    |          |   |  |   |      (Nginx)      |--------->|  (PHP/Python)  |--------->|   Replica  |  |          +------------+
+                                                    |          |   |  |   +-------------------+          +----------------+          +------------+  |          |            |
+                                                    |          |   |  |                                                                              |----------| Monitoring |  
+                                                    |          |---|  +------------------------------------------------------------------------------+          |            |
+						                |         Firewall                                                                                          +------------+
+                                                    |                                            
+                                                    |                                                                                                       
+                                                    |          |---|   +-----------------------------------------------------------------------------+                               
+                                                    |          |   |   |                           Backup Server                                     |
+                                                    |          |   |   |                                                                             |
+                                                    |          |   |   |                                                                             |          +------------+ 
+                                                    |          |   |   |   +---------------+          +-------------+          +------------+        |          |            |
+                                                    |          |   |   |   |               |<---------|             |<---------|            |        |----------| Monitoring |
+                                                    |----------|   |   |   |   Web Server  |          | Application |          |  Database  |        |          |            |
+                                                               |   |   |   |               |          |    Server   |          |   (MySQL)  |        |          +------------+
+                                                               |   |   |   |               |--------->|             |--------->|            |        |
+                                                               |   |   |   +---------------+          +-------------+          +------------+        |            
+                                                               |   |   |                                                                             |
+                                                               |---|   +-----------------------------------------------------------------------------+                              
+                                                              Firewall
+
+
+--> Scale up with load balancers in a cluster:
+
+Introducing additional servers and configuring load balancers in a cluster are deliberate strategies to amplify processing capabilities and system availability. 
+Assigning dedicated roles to servers enables meticulous resource management and performance refinement, laying the groundwork for scalable, maintenance-efficient, 
+and future-proof network architectures, ready to accommodate evolving demands and technological advancements.
+
+
+--> What is a scale up (vertical scaling):
+
+Scale up refers to increasing the capacity of a single server or resource to handle more load. This typically involves upgrading the existing hardware components of 
+a server, such as CPU, RAM, or storage, to improve its performance and capacity.
+
+
+--> Interest of scaling up a load balancer in a cluster:
+
+- Increased traffic handling: allows to handle a larger volume of incoming traffic. As the load balancer is the entry point for all incoming requests, ensuring it 
+has sufficient resources to handle peak traffic loads is essential for maintaining the availability and performance of the application.
+- Improved performance: it can improve its processing capabilities and reduce latency in routing requests to backend servers.
+- Support for advanced features: it may enable support for additional features or functionalities.
+- Redundancy and high availability: in highly available architectures, load balancers are often deployed in redundant configurations to minimize downtime and ensure 
+continuous availability. 
+- Future growth: it prepares the infrastructure for future growth and scalability. 
+
+
+
